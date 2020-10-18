@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>#{msgs.chatWindowTitle}</title>
+</h:head>
+<h:body>
+    <h:form>
+        <h2 style="font-style: italic"><h:outputText value="#{msgs.chatPrompt}"/> #{user.name}</h2>
+        <h:commandButton style="float:right" id="refresh" value="#{msgs.refreshButtonPrompt}">
+            <f:ajax execute="#{user.updateUsersLogged()}" render="online"/>
+            <f:ajax execute="#{user.updateUsersLogout()}" render="offline"/>
+            <f:ajax execute="#{user.updateAllUsers()}" render="dropdownUsers" />
+        </h:commandButton>
+        <table>
+            <tr>
+                <td>
+                    <p style="font-weight:bold"> Online Users:</p>
+                </td>
+                <td>
+                    <h:outputText id="online" value="#{user.updateUsersLogged()}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p style="font-weight:bold">Offline Users:</p>
+                </td>
+                <td>
+                    <h:outputText id="offline" value="#{user.updateUsersLogout()}"/>
+                </td>
+            </tr>
+        </table>
+        <br/>
+        <h:inputTextarea id="messagesArea" style="width:70%; height:200px" value="#{user.receivedMessages}"/>
+        <br/>
+        <h:commandButton id="viewmessage" value="#{msgs.loadMessages}" action="#{user.receive(user.name)}"/>
+        <br/>
+        <br/>
+        <table>
+            <tr>
+                Choose a message to be deleted:
+            </tr>
+            <tr>
+                <td>
+                    <h:inputText value="#{user.messageToDelete}"/>
+                </td>
+                <td>
+                    <h:commandButton value="#{msgs.deleteButtonPrompt}" action="#{user.deleteMessage()}"/>
+                </td>
+            </tr>
+            <tr>
+            </tr>
+        </table>
+        <br/>
+        <h:outputText value="#{msgs.chooseUserPrompt}"/>
+        <h:selectOneMenu id="dropdownUsers" value="#{user.userToWrite}">
+            <f:selectItems value="#{user.updateAllUsers()}"/>
+        </h:selectOneMenu>
+        <br/>
+        <br/>
+        <h:outputText value="#{msgs.enterPrompt}"/>
+        <br/>
+        <table>
+            <tr>
+                <td>
+                    <h:inputText value="#{user.sendMsg}"/>
+                </td>
+                <td>
+                    <h:commandButton value="#{msgs.sendButtonPrompt}" action="#{user.sendMessage(user.sendMsg, user.name, user.userToWrite)}"/>
+                </td>
+            </tr>
+        </table>
+        <br/>
+        <div class="buttons">
+            <h:commandButton value="#{msgs.logoutButtonPrompt}" action="#{user.logout()}"/>
+        </div>
+    </h:form>
+</h:body>
+</html>
