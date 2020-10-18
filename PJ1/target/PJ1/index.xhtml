@@ -11,15 +11,25 @@
 <h:body>
     <h:outputText value="#{msgs.indexPageTitle}"
                   style="font-style: italic; font-size: 1.5em"/>
-    <h4><h:outputText value="#{msgs.indexPageInstr}"/></h4>
     <h:form>
-        <h:panelGrid columns="2">
-            #{msgs.nameTextfieldPrompt}
-            <h:inputText value="#{user.name}"/>
-        </h:panelGrid>
+        <h3>Please enter your name and password.</h3>
+        <table>
+            <tr>
+                <td>Name:</td>
+                <td>
+                    <h:inputText value="#{user.name}" id="name"/>
+                </td>
+            </tr>
+            <tr>
+                <td>Password:</td>
+                <td>
+                    <h:inputSecret value="#{user.password}" id="password"/>
+                </td>
+            </tr>
+        </table>
         <br/>
-        <h:commandButton value="#{msgs.submitButtonPrompt}" action="#{user.login()}"/>
-        <h:commandButton value="#{msgs.registerButtonPrompt}" action="#{user.register()}"/>
+        <h:commandButton value="#{msgs.submitButtonPrompt}" action="#{usm.login()}"/>
+        <h:commandButton value="Sign Up" action="register"/>
     </h:form>
 </h:body>
 </html>

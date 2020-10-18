@@ -12,9 +12,9 @@
     <h:form>
         <h2 style="font-style: italic"><h:outputText value="#{msgs.chatPrompt}"/> #{user.name}</h2>
         <h:commandButton style="float:right" id="refresh" value="#{msgs.refreshButtonPrompt}">
-            <f:ajax execute="#{user.updateUsersLogged()}" render="online"/>
-            <f:ajax execute="#{user.updateUsersLogout()}" render="offline"/>
-            <f:ajax execute="#{user.updateAllUsers()}" render="dropdownUsers" />
+            <f:ajax execute="#{usm.updateUsersLogged()}" render="online"/>
+            <f:ajax execute="#{usm.updateUsersLogout()}" render="offline"/>
+            <f:ajax execute="#{usm.updateAllUsers()}" render="dropdownUsers" />
         </h:commandButton>
         <table>
             <tr>
@@ -22,7 +22,7 @@
                     <p style="font-weight:bold"> Online Users:</p>
                 </td>
                 <td>
-                    <h:outputText id="online" value="#{user.updateUsersLogged()}"/>
+                    <h:outputText id="online" value="#{usm.updateUsersLogged()}"/>
                 </td>
             </tr>
             <tr>
@@ -30,14 +30,14 @@
                     <p style="font-weight:bold">Offline Users:</p>
                 </td>
                 <td>
-                    <h:outputText id="offline" value="#{user.updateUsersLogout()}"/>
+                    <h:outputText id="offline" value="#{usm.updateUsersLogout()}"/>
                 </td>
             </tr>
         </table>
         <br/>
-        <h:inputTextarea id="messagesArea" style="width:70%; height:200px" value="#{user.receivedMessages}"/>
+        <h:inputTextarea id="messagesArea" style="width:70%; height:200px" value="#{mchat.receivedMessages}"/>
         <br/>
-        <h:commandButton id="viewmessage" value="#{msgs.loadMessages}" action="#{user.receive(user.name)}"/>
+        <h:commandButton id="viewmessage" value="#{msgs.loadMessages}" action="#{mchat.receive(user.name)}"/>
         <br/>
         <br/>
         <table>
@@ -46,10 +46,10 @@
             </tr>
             <tr>
                 <td>
-                    <h:inputText value="#{user.messageToDelete}"/>
+                    <h:inputText value="#{mchat.messageIndexToDelete}"/>
                 </td>
                 <td>
-                    <h:commandButton value="#{msgs.deleteButtonPrompt}" action="#{user.deleteMessage()}"/>
+                    <h:commandButton value="#{msgs.deleteButtonPrompt}" action="#{mchat.deleteMessage()}"/>
                 </td>
             </tr>
             <tr>
@@ -57,8 +57,8 @@
         </table>
         <br/>
         <h:outputText value="#{msgs.chooseUserPrompt}"/>
-        <h:selectOneMenu id="dropdownUsers" value="#{user.userToWrite}">
-            <f:selectItems value="#{user.updateAllUsers()}"/>
+        <h:selectOneMenu id="dropdownUsers" value="#{mchat.recipient}">
+            <f:selectItems value="#{usm.updateAllUsers()}"/>
         </h:selectOneMenu>
         <br/>
         <br/>
@@ -67,16 +67,16 @@
         <table>
             <tr>
                 <td>
-                    <h:inputText value="#{user.sendMsg}"/>
+                    <h:inputText value="#{mchat.messageToSend}"/>
                 </td>
                 <td>
-                    <h:commandButton value="#{msgs.sendButtonPrompt}" action="#{user.sendMessage(user.sendMsg, user.name, user.userToWrite)}"/>
+                    <h:commandButton value="#{msgs.sendButtonPrompt}" action="#{mchat.sendMessage(mchat.messageToSend, user.name, mchat.recipient)}"/>
                 </td>
             </tr>
         </table>
         <br/>
         <div class="buttons">
-            <h:commandButton value="#{msgs.logoutButtonPrompt}" action="#{user.logout()}"/>
+            <h:commandButton value="#{msgs.logoutButtonPrompt}" action="#{usm.logout()}"/>
         </div>
     </h:form>
 </h:body>

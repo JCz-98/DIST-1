@@ -1,17 +1,19 @@
 package com.corejsf;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Messages {
+public class Message implements Serializable {
+
     private String message;
-    private String receiver;
     private String sender;
+    private String receiver;
     private Date date;
 
-    public Messages(String message, String receiver, String sender, Date date) {
+    public Message(String message, String receiver, String sender, Date date) {
         this.date = date;
-        this.receiver = receiver;
         this.sender = sender;
+        this.receiver = receiver;
         this.message = message;
     }
 
@@ -23,20 +25,20 @@ public class Messages {
         this.message = message;
     }
 
-    public String getReceiver() {
-        return receiver;
-    }
-
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
-    }
-
     public String getSender() {
         return sender;
     }
 
     public void setSender(String sender) {
         this.sender = sender;
+    }
+
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
     }
 
     public Date getDate() {
@@ -47,7 +49,7 @@ public class Messages {
         this.date = date;
     }
 
-    public String messageComplete() {
-        return sender + "@chat" + " to: " + receiver + "[ " + date + " ]  " + message;
+    public String displayMessage() {
+        return "[" + date + "] <From: " + sender + ", To: " + receiver + "> Msg: " + message;
     }
 }
