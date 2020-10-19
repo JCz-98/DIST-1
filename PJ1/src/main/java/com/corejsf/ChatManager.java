@@ -15,7 +15,6 @@ public class ChatManager {
     @Inject
     private ServerData serverData;
 
-//    private String name;
     private String recipient = null;
     private String messageToSend = "";
     private String receivedMessages = "";
@@ -55,47 +54,72 @@ public class ChatManager {
         this.messageIndexToDelete = messageIndexToDelete;
     }
 
+    public ArrayList<Integer> getMessagesIndexList() {
+        return messagesIndexList;
+    }
+
+    public void setMessagesIndexList(ArrayList<Integer> messagesIndexList) {
+        this.messagesIndexList = messagesIndexList;
+    }
+
+    // chat methods
     public void sendMessage(String message, String user, String receiver) {
+
         if (!message.isEmpty()) {
             Message msg = new Message(message, receiver, user, new Date());
             serverData.addMessage(msg);
             messageToSend = "";
-        }
-        else{
+
+        } else {
             FacesContext context = FacesContext.getCurrentInstance();
 
             FacesMessage infoMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Message box is empty",
                     "Please type a message.");
             context.addMessage(null, infoMessage);
-
         }
     }
 
-    public void receiveMessage(String user) {
+    public String receiveMessages(String toUser) {
 
-        String msgstr = "";
+        String messsagesDisplayString = "";
         int count = 1;
         FacesContext context = FacesContext.getCurrentInstance();
+        ArrayList<Message> messagesInServer = serverData.getMessages();
 
-        for (Message messagesnext : serverData.getMessages()) {
-            if (messagesnext.getReceiver().equals(user)) {
-                msgstr += count + ". " + messagesnext.displayMessage() + "\n";
-                messagesIndexList.add(serverData.getMessages().indexOf(messagesnext));
-                count++;
+        if (messagesInServer.size() > 0) {
+
+            for (Message messsage : serverData.getMessages()) {
+
+                if (messsage.getReceiver().equals(toUser)) {
+                    messsagesDisplayString += count + ". " + messsage.displayMessage() + "\n";
+                    messagesIndexList.add(serverData.getMessages().indexOf(messsage));
+                    count++;
+                }
             }
+            receivedMessages = messsagesDisplayString;
+            return "welcome";
         }
-        receivedMessages = msgstr;
-    }
-
-    public String receive(String user) {
-        receiveMessage(user);
-        return "welcome";
+        else{
+            FacesMessage infoMessage = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "There are not new messages for you available in the server",
+                    "No new messages.");
+            context.addMessage(null, infoMessage);
+            return null;
+        }
     }
 
     public void deleteMessage() {
         if (messagesIndexList.size() > 0)
             serverData.removeMessage((int) messagesIndexList.get(messageIndexToDelete - 1));
+        else {
+            FacesContext context = FacesContext.getCurrentInstance();
+
+            FacesMessage infoMessage = new FacesMessage(FacesMessage.SEVERITY_WARN,
+                    "There are not messages to delete",
+                    "Please check a message.");
+            context.addMessage(null, infoMessage);
+        }
     }
 
 }

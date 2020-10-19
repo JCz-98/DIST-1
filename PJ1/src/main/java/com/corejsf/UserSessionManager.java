@@ -1,5 +1,6 @@
 package com.corejsf;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -7,10 +8,12 @@ import javax.inject.Named;
 import java.util.ArrayList;
 
 @Named("usm")
+@ApplicationScoped
 public class UserSessionManager {
 
     @Inject
     private ServerData serverData;
+
     @Inject
     private UserBean user;
 
@@ -105,8 +108,8 @@ public class UserSessionManager {
 
     public String updateUsersLogged() {
         String loggedUsersString = "";
-        for (String nextUser : serverData.getOnlineUsers()) {
-            loggedUsersString += nextUser + ", ";
+        for (String onlineUser : serverData.getOnlineUsers()) {
+            loggedUsersString +=  ">> " + onlineUser + " \n";
         }
 
         if (loggedUsersString.length() > 0)
@@ -116,8 +119,8 @@ public class UserSessionManager {
 
     public String updateUsersLogout() {
         String offUsersString = "";
-        for (String nextUser : serverData.getOfflineUsers()) {
-            offUsersString += nextUser + ", ";
+        for (String offlineUser : serverData.getOfflineUsers()) {
+            offUsersString += "<< " + offlineUser + " \n";
         }
 
         if (offUsersString.length() > 0)

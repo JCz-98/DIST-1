@@ -3,80 +3,89 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
-    <title>#{msgs.chatWindowTitle}</title>
+    <title>${msgs.chatWindowTitle}</title>
 </h:head>
 <h:body>
+    <h:outputStylesheet library="css" name="style.css"/>
     <h:form>
-        <h2 style="font-style: italic"><h:outputText value="#{msgs.chatPrompt}"/> #{user.name}</h2>
-        <h:commandButton style="float:right" id="refresh" value="#{msgs.refreshButtonPrompt}">
-            <f:ajax execute="#{usm.updateUsersLogged()}" render="online"/>
-            <f:ajax execute="#{usm.updateUsersLogout()}" render="offline"/>
-            <f:ajax execute="#{usm.updateAllUsers()}" render="dropdownUsers" />
-        </h:commandButton>
-        <table>
-            <tr>
-                <td>
-                    <p style="font-weight:bold"> Online Users:</p>
-                </td>
-                <td>
-                    <h:outputText id="online" value="#{usm.updateUsersLogged()}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p style="font-weight:bold">Offline Users:</p>
-                </td>
-                <td>
-                    <h:outputText id="offline" value="#{usm.updateUsersLogout()}"/>
-                </td>
-            </tr>
-        </table>
+        <div class="welcome-title">
+            <h3><h:outputText value="#{msgs.chatPrompt}"/> ${user.name}</h3>
+            <div class="buttons">
+                <h:commandButton style="float:right" value="#{msgs.logoutButtonPrompt}" action="#{usm.logout()}"/>
+            </div>
+        </div>
         <br/>
-        <h:inputTextarea id="messagesArea" style="width:70%; height:200px" value="#{mchat.receivedMessages}"/>
-        <br/>
-        <h:commandButton id="viewmessage" value="#{msgs.loadMessages}" action="#{mchat.receive(user.name)}"/>
-        <br/>
-        <br/>
-        <table>
-            <tr>
-                Choose a message to be deleted:
-            </tr>
-            <tr>
-                <td>
-                    <h:inputText value="#{mchat.messageIndexToDelete}"/>
-                </td>
-                <td>
-                    <h:commandButton value="#{msgs.deleteButtonPrompt}" action="#{mchat.deleteMessage()}"/>
-                </td>
-            </tr>
-            <tr>
-            </tr>
-        </table>
-        <br/>
-        <h:outputText value="#{msgs.chooseUserPrompt}"/>
-        <h:selectOneMenu id="dropdownUsers" value="#{mchat.recipient}">
-            <f:selectItems value="#{usm.updateAllUsers()}"/>
-        </h:selectOneMenu>
-        <br/>
-        <br/>
-        <h:outputText value="#{msgs.enterPrompt}"/>
-        <br/>
-        <table>
-            <tr>
-                <td>
-                    <h:inputText value="#{mchat.messageToSend}"/>
-                </td>
-                <td>
-                    <h:commandButton value="#{msgs.sendButtonPrompt}" action="#{mchat.sendMessage(mchat.messageToSend, user.name, mchat.recipient)}"/>
-                </td>
-            </tr>
-        </table>
-        <br/>
-        <div class="buttons">
-            <h:commandButton value="#{msgs.logoutButtonPrompt}" action="#{usm.logout()}"/>
+        <div class="main-container">
+            <div class="register-container">
+                <br/>
+                <h:outputText value="#{msgs.chooseUserPrompt}"/>
+                <h:selectOneMenu id="dropdownUsers" value="#{mchat.recipient}">
+                    <f:selectItems value="#{usm.updateAllUsers()}"/>
+                </h:selectOneMenu>
+                <br/>
+                <h:outputText value="#{msgs.enterPrompt}"/>
+                <table>
+                    <tr>
+                        <td>
+                            <h:inputTextarea style="width: 100%; height: 100px" value="#{mchat.messageToSend}"/>
+                        </td>
+                        <td>
+                            <h:commandButton value="#{msgs.sendButtonPrompt}"
+                                             action="#{mchat.sendMessage(mchat.messageToSend, user.name, mchat.recipient)}"/>
+                        </td>
+                    </tr>
+                </table>
+                <table id="registered">
+                    <tr>
+                        <td><p style="font-weight:bold">Registered Users</p></td>
+                        <td>
+                            <h:commandButton id="refresh" value="#{msgs.refreshButtonPrompt}">
+                                <f:ajax execute="${usm.updateUsersLogged()}" render="online"/>
+                                <f:ajax execute="${usm.updateUsersLogout()}" render="offline"/>
+                                <f:ajax execute="${usm.updateAllUsers()}" render="dropdownUsers"/>
+                            </h:commandButton>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Online</th>
+                        <th>Offline</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <textarea id="online" cols="20" rows="10" >${usm.updateUsersLogged()}</textarea>
+                        </td>
+                        <td>
+                            <textarea id="offline" cols="20" rows="10" >${usm.updateUsersLogout()}</textarea>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="chat-container">
+                <h3 class="chat-title">Chat Messages</h3>
+                <h:inputTextarea id="messagesArea" style="width:100%; height:300px" value="#{mchat.receivedMessages}" disabled="true"/>
+                <h:commandButton id="viewmessage" value="#{msgs.loadMessages}" action="#{mchat.receiveMessages(user.name)}"/>
+                <br/>
+                <br/>
+                <table>
+                    <tr>
+                        <td>
+                            Choose a message to be deleted:
+                        </td>
+                        <td>
+                            <h:inputText value="#{mchat.messageIndexToDelete}" style="width: 15%"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <h:commandButton value="#{msgs.deleteButtonPrompt}" action="#{mchat.deleteMessage()}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                    </tr>
+                </table>
+            </div>
         </div>
     </h:form>
 </h:body>
